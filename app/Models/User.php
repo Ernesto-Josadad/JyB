@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Followers;
+use App\Models\Posts;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -17,6 +20,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasTeams;
 
     /**
      * The attributes that are mass assignable.
@@ -63,15 +67,18 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function posts(){
+    public function posts()
+    {
         return $this->hasMany(Posts::class);
     }
 
-    public function followers(){
+    public function followers()
+    {
         return $this->hasMany(Followers::class);
     }
 
-    public function receivesBroadcastNotificationsOn(){
-        return 'App.Models.User.'.$this->id;
+    public function receivesBroadcastNotificationsOn()
+    {
+        return 'App.Models.User.' . $this->id;
     }
 }
